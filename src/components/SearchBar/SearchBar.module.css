@@ -1,0 +1,23 @@
+.headerSearch {
+    display: flex;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+  
+.formSearch {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin: 0 auto;
+}
+  
+.inputSearch {
+    padding: 15px;
+    width: 300px;
+}
+  
+.btnSearch {
+    display: block;
+    width: 150px;
+    cursor: pointer;
+}
