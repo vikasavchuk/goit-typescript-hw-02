@@ -1,11 +1,17 @@
 import { Field, Form, Formik } from "formik";
 import css from "./SearchBar.module.css";
 import toast from "react-hot-toast";
+import { FC } from "react";
 
-const SearchBar = ({ onSearch }) => {
-  const handleSubmit = (values) => {
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+}
+
+const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
+  const handleSubmit = (values: { query: string }) => {
     if (!values.query.trim()) {
-      return toast.error("Write anything");
+      toast.error("Write anything");
+      return;
     }
     onSearch(values.query);
   };

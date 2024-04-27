@@ -3,7 +3,7 @@ import axios from "axios";
 const API_KEY = "zX9Q4l1kC2381w08xCDwhyDAbdYJ8nwGR4L3LvE72fk";
 axios.defaults.baseURL = "https://api.unsplash.com/";
 
-export const Apii = async (query, page) => {
+export const Apii = async (query: string, page: number) => {
   const { data } = await axios.get("/search/photos/", {
     params: {
       client_id: API_KEY,

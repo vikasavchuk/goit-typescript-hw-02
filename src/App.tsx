@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Apii from "./components/Apii/Apii";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
@@ -7,48 +7,47 @@ import Loader from "./components/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageModal from "./components/ImageModal/ImageModal";
+import { Image, selectedPhoto } from "./AppTypes";
 
 function App() {
-  const [photo, setPhoto] = useState([]);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [btnLoadMore, setBtnLoadMore] = useState(false);
-  const [loaderVissible, setLoaderVissible] = useState(false);
-  const [error, setError] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState({
+  const [photo, setPhoto] = useState<Image[]>([]);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [btnLoadMore, setBtnLoadMore] = useState<boolean>(false);
+  const [loaderVissible, setLoaderVissible] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<selectedPhoto>({
     src: "",
-    desription: "",
+    description: "",
   });
   useEffect(() => {
     if (query === "") {
       return;
     }
-    async function fetchData() {
+    const fetchData = async () => {
       try {
         setLoaderVissible(true);
-        const { results, total_pages } = await Apii(query, page);
 
+        const { results, total_pages } = await Apii(query, page);
         if (results.length === 0) {
-          return toast.error("This didn't work.");
+          toast.error("This didn't work.");
+          return;
         }
 
-        console.log(query);
         setBtnLoadMore(total_pages > page);
-        setPhoto((prevPhoto) => {
-          return [...prevPhoto, ...results];
-        });
+        setPhoto((prevState) => [...prevState, ...results]);
       } catch (error) {
         setError(true);
         toast.error("This didn't work.");
       } finally {
         setLoaderVissible(false);
       }
-    }
+    };
     fetchData();
   }, [query, page]);
 
-  const searchPhoto = (value) => {
+  const searchPhoto = (value: string) => {
     setQuery(value);
     setBtnLoadMore(false);
     setPage(1);
@@ -59,9 +58,10 @@ function App() {
     setPage((prevPage) => prevPage + 1);
   };
 
-  function openModal(state, photo) {
+  function openModal(state: boolean, photo: selectedPhoto) {
     setModalIsOpen(true);
     if (state) setSelectedPhoto(photo);
+    console.log("photo: ", photo);
   }
   function closeModal() {
     setModalIsOpen(false);
